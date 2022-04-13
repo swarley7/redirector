@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 var redirUrl string
@@ -13,8 +14,23 @@ var host string
 var statusCode int
 
 func redirect(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Request from: ", r.RemoteAddr, "Status code:", statusCode, " to: ", redirUrl)
-	http.Redirect(w, r, redirUrl, statusCode)
+	r.ParseForm()
+	url := redirUrl
+	code := statusCode
+	var err error
+
+	if r.Form.Has("u") {
+		url = r.Form.Get("u")
+	}
+	if r.Form.Has("c") {
+		code, err = strconv.Atoi(r.Form.Get("c"))
+		if err != nil {
+			fmt.Println("Supplied status code is not a valid int - ", r.Form.Get("c"), " - ", err)
+			code = statusCode
+		}
+	}
+	fmt.Println("Request from: ", r.RemoteAddr, "Status code:", code, " to: ", url)
+	http.Redirect(w, r, url, code)
 }
 
 func main() {
