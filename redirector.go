@@ -21,7 +21,7 @@ func main() {
 	flag.StringVar(&redirUrl, "redir", "https://example.com/aaa", "Redirect URL")
 	flag.IntVar(&port, "port", 8080, "Port to listen on")
 	flag.StringVar(&host, "host", "localhost", "Host to listen on")
-	flag.StringVar(&statusCode, "code", 302, "Status code to respond with")
+	flag.IntVar(&statusCode, "code", 302, "Status code to respond with")
 
 	flag.Parse()
 
