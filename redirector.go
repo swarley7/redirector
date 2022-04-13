@@ -13,7 +13,7 @@ var host string
 var statusCode int
 
 func redirect(w http.ResponseWriter, r *http.Request) {
-
+	fmt.Println("Request from: ", r.RemoteAddr, "Status code:", statusCode, " to: ", redirUrl)
 	http.Redirect(w, r, redirUrl, statusCode)
 }
 
@@ -26,7 +26,7 @@ func main() {
 	flag.Parse()
 
 	http.HandleFunc("/", redirect)
-	log.Printf("Listening on %s:%d - Redirecting requests to %s", host, port, redirUrl)
+	log.Printf("Listening on %s:%d - Redirecting (Status Code: %d) requests to %s", host, port, statusCode, redirUrl)
 	err := http.ListenAndServe(fmt.Sprintf("%s:%d", host, port), nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
